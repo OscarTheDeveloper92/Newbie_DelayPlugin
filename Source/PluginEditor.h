@@ -31,10 +31,11 @@ private:
     // access the processor object that created it.
     Delay1_0AudioProcessor& audioProcessor;
 
-    RotaryKnob gainKnob { "Gain" };
-    juce::AudioProcessorValueTreeState::SliderAttachment attachment{
-        audioProcessor.apvts, gainParamID.getParamID(), gainKnob.slider
-    };
+    juce::GroupComponent delayGroup, feedbackGroup, outputGroup;
 
+    RotaryKnob gainKnob { "Gain", audioProcessor.apvts, gainParamID };
+    RotaryKnob mixKnob { "Mix", audioProcessor.apvts, mixParamID };
+    RotaryKnob delayTimeKnob { "Time", audioProcessor.apvts, delayTimeParamID };
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Delay1_0AudioProcessorEditor)
 };

@@ -12,7 +12,10 @@
 #include "RotaryKnob.h"
 
 //==============================================================================
-RotaryKnob::RotaryKnob(const juce::String& text)
+RotaryKnob::RotaryKnob(const juce::String& text,
+                       juce::AudioProcessorValueTreeState& apvts,
+                       const juce::ParameterID& parameterID) 
+                       : attachment(apvts, parameterID.getParamID(), slider)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
