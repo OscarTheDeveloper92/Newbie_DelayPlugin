@@ -93,12 +93,14 @@ void Delay1_0AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     // initialisation that you need..
     params.prepareToPlay(sampleRate);
     params.reset();
+
     juce::dsp::ProcessSpec spec;
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = juce::uint32(samplesPerBlock);
     spec.numChannels = 2;
 
     delayLine.prepare(spec);
+
     double numSamples = Parameters::maxDelayTime / 1000.0 * sampleRate;
     int maxDelayInSamples = int(std::ceil(numSamples));
     delayLine.setMaximumDelayInSamples(maxDelayInSamples);
@@ -113,12 +115,10 @@ void Delay1_0AudioProcessor::releaseResources()
     // spare memory, etc.
 }
 
-#ifndef JucePlugin_PreferredChannelConfigurations
 bool Delay1_0AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
     return layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo();
 }
-#endif
 
 void Delay1_0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[maybe_unused]] juce::MidiBuffer& midiMessages)
 {
@@ -143,6 +143,7 @@ void Delay1_0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[m
     // interleaved by keeping the same state.
 
     params.update();
+
     float sampleRate = float(getSampleRate());
 
     float* channelDataL = buffer.getWritePointer(0);
@@ -151,6 +152,7 @@ void Delay1_0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[m
     for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
     {
         params.smoothen();
+
         float delayInSamples = params.delayTime / 1000.0f * sampleRate;
         delayLine.setDelay(delayInSamples); //moved this line and the line above into the forloop 
 
@@ -163,8 +165,8 @@ void Delay1_0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[m
         float wetL = delayLine.popSample(0);
         float wetR = delayLine.popSample(1);
 
-        float mixL = dryL * (1.0f - params.mix) + wetL * params.mix; // a * (1-c) + b * c where c is some value between 0 and 1 is linear interpolation
-        float mixR = dryR * (1.0f - params.mix) + wetR * params.mix;
+        float mixL = dryL + wetL * params.mix; // a * (1-c) + b * c where c is some value between 0 and 1 is linear interpolation
+        float mixR = dryR + wetR * params.mix;
 
         channelDataL[sample] = mixL * params.gain;
         channelDataR[sample] = mixR * params.gain;

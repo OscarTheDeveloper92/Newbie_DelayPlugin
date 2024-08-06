@@ -15,7 +15,7 @@
 RotaryKnob::RotaryKnob(const juce::String& text,
                        juce::AudioProcessorValueTreeState& apvts,
                        const juce::ParameterID& parameterID) 
-                       : attachment(apvts, parameterID.getParamID(), slider)
+    : attachment(apvts, parameterID.getParamID(), slider)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
@@ -25,8 +25,8 @@ RotaryKnob::RotaryKnob(const juce::String& text,
     slider.setBounds(0, 0, 70, 86);
     addAndMakeVisible(slider);
 
-    //Gain Label for Knob
-    label.setText("Gain", juce::NotificationType::dontSendNotification);
+    //Text Label for Knob
+    label.setText(text, juce::NotificationType::dontSendNotification);
     label.setJustificationType(juce::Justification::horizontallyCentred);
     label.setBorderSize(juce::BorderSize<int>{0, 0, 2, 0});
     label.attachToComponent(&slider, false);

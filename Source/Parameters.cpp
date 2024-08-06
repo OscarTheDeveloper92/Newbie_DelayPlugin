@@ -15,7 +15,7 @@ static void castParameter(juce::AudioProcessorValueTreeState& apvts,
     const juce::ParameterID& id, T& destination)
 {
     destination = dynamic_cast<T>(apvts.getParameter(id.getParamID()));
-    jassert(destination); 
+    jassert(destination);
 }
 
 static juce::String stringFromMilliseconds(float value, int)
@@ -94,6 +94,30 @@ Parameters::createParameterLayout()     // also added a range from -12db to 12db
     return layout;
 }
 
+
+void Parameters::prepareToPlay(double sampleRate) noexcept
+{
+    double duration = 0.02;
+    gainSmoother.reset(sampleRate, duration);
+
+    coeff = 1.0f - std::exp(-1.0f / (0.2f * float(sampleRate))); //filter coefficient calculation depending on the sample rate.
+    // 0.2f represents 200 milliseconds. Mimics the charge time of an actual analog capacitor
+
+    mixSmoother.reset(sampleRate, duration);
+}
+
+void Parameters::reset() noexcept
+{
+    gain = 0.0f;
+    gainSmoother.setCurrentAndTargetValue(
+        juce::Decibels::decibelsToGain(gainParam->get()));
+
+    delayTime = 0.0f;
+
+    mix = 1.0f;
+    mixSmoother.setCurrentAndTargetValue(mixParam->get() * 0.01f);
+}
+
 void Parameters::update() noexcept
 {
     gainSmoother.setTargetValue(juce::Decibels::decibelsToGain(gainParam->get()));
@@ -103,34 +127,16 @@ void Parameters::update() noexcept
     if (delayTime == 0.0f) {
         delayTime = targetDelayTime;
     }
+
     mixSmoother.setTargetValue(mixParam->get() * 0.01f);
-}
-
-void Parameters::prepareToPlay(double sampleRate) noexcept
-{
-    double duration = 0.02;
-    gainSmoother.reset(sampleRate, duration);
-    coeff = 1.0f - std::exp(-1.0f / (0.2f * float(sampleRate))); //filter coefficient calculation depending on the sample rate.
-                                                                 // 0.2f represents 200 milliseconds. Mimics the charge time of an actual analog capacitor
-    mixSmoother.reset(sampleRate, duration);                                                             
-}
-
-void Parameters::reset() noexcept
-{
-    gain = 0.0f;
-    delayTime = 0.0f;
-
-    gainSmoother.setCurrentAndTargetValue(
-        juce::Decibels::decibelsToGain(gainParam->get()));
-
-    mix = 1.0f;
-    mixSmoother.setCurrentAndTargetValue(mixParam->get() * 0.01f);
 }
 
 void Parameters::smoothen() noexcept
 {
     gain = gainSmoother.getNextValue();
+
     delayTime += (targetDelayTime - delayTime) * coeff; //The infamous one-pole filter formula
+    
     mix = mixSmoother.getNextValue();
 }
 

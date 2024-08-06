@@ -24,11 +24,12 @@ Delay1_0AudioProcessorEditor::Delay1_0AudioProcessorEditor (Delay1_0AudioProcess
     feedbackGroup.setText("Feedback");
     feedbackGroup.setTextLabelPosition(juce::Justification::horizontallyCentred);
     addAndMakeVisible(feedbackGroup);
+
     outputGroup.setText("Output");
     outputGroup.setTextLabelPosition(juce::Justification::horizontallyCentred);
     outputGroup.addAndMakeVisible(gainKnob);
     outputGroup.addAndMakeVisible(mixKnob);
-    outputGroup.addAndMakeVisible(outputGroup);
+    addAndMakeVisible(outputGroup);
 
     setSize (500, 330); //Why does everything go before setSize?
     setResizable(true, true);
