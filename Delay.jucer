@@ -41,7 +41,7 @@
     <VS2022 targetFolder="Builds/VisualStudio2022">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" targetName="Delay" enablePluginBinaryCopyStep="1"
-                       winWarningLevel="4"/>
+                       winWarningLevel="4" useRuntimeLibDLL="0"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="Delay 1.0"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
