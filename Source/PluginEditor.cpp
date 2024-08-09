@@ -43,7 +43,7 @@ Delay1_0AudioProcessorEditor::~Delay1_0AudioProcessorEditor()
 void Delay1_0AudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll(juce::Colours::darkgrey);
+    g.fillAll(Colors::background);
 }
 
 void Delay1_0AudioProcessorEditor::resized()

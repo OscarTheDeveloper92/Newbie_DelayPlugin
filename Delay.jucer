@@ -18,6 +18,8 @@
       <FILE id="AahHb6" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="QAFNfE" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="Y3eIRY" name="LookAndFeel.cpp" compile="1" resource="0" file="Source/LookAndFeel.cpp"/>
+      <FILE id="S4y6i4" name="LookAndFeel.h" compile="0" resource="0" file="Source/LookAndFeel.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
