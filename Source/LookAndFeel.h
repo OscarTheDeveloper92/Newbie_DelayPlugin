@@ -51,6 +51,8 @@ class RotaryKnobLookAndFeel : public juce::LookAndFeel_V4
             float sliderPos, float rotaryStartAngle,
             float rotaryEndAngle, juce::Slider& slider) override;
     private:
+        juce::DropShadow dropShadow { Colors::Knob::dropShadow, 6, {0,3} };
+
         //Makes sure the object can't be copied and create memory leaks.
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotaryKnobLookAndFeel)
 };
