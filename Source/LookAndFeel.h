@@ -13,12 +13,12 @@
 
 namespace Colors
 {
-    const juce::Colour background { 245, 240, 235 };
+    const juce::Colour background { 240, 240, 240 };
     const juce::Colour header { 40,40,40 };
 
     namespace Knob
     {
-        const juce::Colour trackBackground { 205,200,195 };
+        const juce::Colour trackBackground { 232,35,35 };
         const juce::Colour trackActive { 177,101,135 };
         const juce::Colour outline { 255,250,245 };
         const juce::Colour gradientTop { 250,245,240 };
