@@ -39,4 +39,6 @@ private:
     RotaryKnob delayTimeKnob{ "Time", audioProcessor.apvts, delayTimeParamID };
 
     juce::GroupComponent delayGroup, feedbackGroup, outputGroup;
+
+    MainLookAndFeel mainLF;
 };

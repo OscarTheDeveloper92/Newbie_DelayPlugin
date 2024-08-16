@@ -32,7 +32,9 @@ Delay1_0AudioProcessorEditor::Delay1_0AudioProcessorEditor (Delay1_0AudioProcess
     addAndMakeVisible(outputGroup);
 
     delayTimeKnob.slider.setColour(juce::Slider::rotarySliderFillColourId,
-                                   juce::Colours::darkgoldenrod);
+                                   juce::Colours::palevioletred);
+
+    setLookAndFeel(&mainLF);
 
     setSize (500, 330); //Why does everything go before setSize?
     setResizable(true, true);
@@ -40,6 +42,7 @@ Delay1_0AudioProcessorEditor::Delay1_0AudioProcessorEditor (Delay1_0AudioProcess
 
 Delay1_0AudioProcessorEditor::~Delay1_0AudioProcessorEditor()
 {
+    setLookAndFeel(nullptr);
 }
 
 //==============================================================================

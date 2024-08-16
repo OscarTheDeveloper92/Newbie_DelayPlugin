@@ -30,7 +30,23 @@ namespace Colors
         const juce::Colour value { 240,240,240 };
         const juce::Colour caret { 255, 255, 255 };
     }
+
+    namespace Group
+    {
+        const juce::Colour label { 160, 155, 150 };
+        const juce::Colour outline { 235, 230, 225 };
+    }
 }
+
+class Fonts
+{
+    public:
+        static juce::Font getFont(float height = 16.0f);
+        Fonts() = delete;
+
+    private:
+        static const juce::Typeface::Ptr typeface;
+};
 
 //The RotaryKnobLookAndFeel class is based off the juce::LookAndFeel_V4 class.
 class RotaryKnobLookAndFeel : public juce::LookAndFeel_V4
@@ -50,9 +66,30 @@ class RotaryKnobLookAndFeel : public juce::LookAndFeel_V4
         void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height,
             float sliderPos, float rotaryStartAngle,
             float rotaryEndAngle, juce::Slider& slider) override;
+
+        juce::Font getLabelFont(juce::Label&) override;
+
+        juce::Label* createSliderTextBox(juce::Slider&) override;
+
+        void drawTextEditorOutline(juce::Graphics&, int, int, juce::TextEditor&) override { }
+
+        void fillTextEditorBackground(juce::Graphics&, int width, int height,
+            juce::TextEditor&) override;
+
     private:
         juce::DropShadow dropShadow { Colors::Knob::dropShadow, 6, {0,3} };
 
         //Makes sure the object can't be copied and create memory leaks.
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotaryKnobLookAndFeel)
+};
+
+class MainLookAndFeel : public juce::LookAndFeel_V4
+{
+    public:
+        MainLookAndFeel();
+
+        juce::Font getLabelFont(juce::Label&) override;
+
+    private:
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainLookAndFeel)
 };
