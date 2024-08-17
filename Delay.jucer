@@ -8,6 +8,8 @@
   <MAINGROUP id="cu1ziD" name="Delay">
     <GROUP id="{76ECFFC2-5420-3314-CFF0-9BA0C50812BB}" name="Assets">
       <FILE id="AX3kJd" name="Lato-Medium.ttf" compile="0" resource="1" file="../getting-started-book-main/getting-started-book-main/Resources/Lato-Medium.ttf"/>
+      <FILE id="ayB4vk" name="Logo.png" compile="0" resource="1" file="../getting-started-book-main/getting-started-book-main/Resources/Logo.png"/>
+      <FILE id="iFqUnS" name="Noise.png" compile="0" resource="1" file="../getting-started-book-main/getting-started-book-main/Resources/Noise.png"/>
     </GROUP>
     <GROUP id="{4CCC713E-B84D-28B8-9334-76D2B411C10F}" name="Source">
       <FILE id="ttM8I5" name="RotaryKnob.cpp" compile="1" resource="0" file="Source/RotaryKnob.cpp"/>
