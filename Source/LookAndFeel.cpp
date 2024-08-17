@@ -21,7 +21,7 @@ juce::Font Fonts::getFont(float height)
 RotaryKnobLookAndFeel::RotaryKnobLookAndFeel()
 {
     setColour(juce::Label::textColourId, Colors::Knob::label);
-    setColour(juce::Slider::textBoxBackgroundColourId, Colors::Knob::label);
+    setColour(juce::Slider::textBoxTextColourId, Colors::Knob::label);
     setColour(juce::Slider::rotarySliderFillColourId, Colors::Knob::trackActive);
     setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::transparentBlack);
     setColour(juce::CaretComponent::caretColourId, Colors::Knob::caret);
