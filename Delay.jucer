@@ -12,6 +12,8 @@
       <FILE id="iFqUnS" name="Noise.png" compile="0" resource="1" file="../getting-started-book-main/getting-started-book-main/Resources/Noise.png"/>
     </GROUP>
     <GROUP id="{4CCC713E-B84D-28B8-9334-76D2B411C10F}" name="Source">
+      <FILE id="JmoLzj" name="ProtectYourEars.h" compile="0" resource="0"
+            file="Source/ProtectYourEars.h"/>
       <FILE id="ttM8I5" name="RotaryKnob.cpp" compile="1" resource="0" file="Source/RotaryKnob.cpp"/>
       <FILE id="J4Vcsl" name="RotaryKnob.h" compile="0" resource="0" file="Source/RotaryKnob.h"/>
       <FILE id="UmgoPR" name="Parameters.cpp" compile="1" resource="0" file="Source/Parameters.cpp"/>
