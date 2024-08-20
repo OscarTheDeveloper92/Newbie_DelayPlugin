@@ -107,6 +107,9 @@ void Delay1_0AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     delayLine.setMaximumDelayInSamples(maxDelayInSamples);
     delayLine.reset();
 
+    feedbackL = 0.0f;
+    feedbackR = 0.0f;
+
     //DBG(maxDelayInSamples);
 }
 
@@ -160,12 +163,14 @@ void Delay1_0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[m
         float dryL = channelDataL[sample];
         float dryR = channelDataR[sample];
 
-        delayLine.pushSample(0, dryL);
-        delayLine.pushSample(1, dryR);
+        delayLine.pushSample(0, dryL + feedbackL);
+        delayLine.pushSample(1, dryR + feedbackR);
 
         float wetL = delayLine.popSample(0);
         float wetR = delayLine.popSample(1);
-        wetL += delayLine.popSample(0, delayInSamples * 2.0f, false) * 0.7f;
+
+        feedbackL = wetL * params.feedback;
+        feedbackR = wetR * params.feedback;
 
         float mixL = dryL + wetL * params.mix; // a * (1-c) + b * c where c is some value between 0 and 1 is linear interpolation
         float mixR = dryR + wetR * params.mix;
