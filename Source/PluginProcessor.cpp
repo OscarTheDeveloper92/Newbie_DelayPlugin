@@ -18,7 +18,8 @@ Delay1_0AudioProcessor::Delay1_0AudioProcessor()
     ),
     params(apvts)
 {
-    //do nothing, code moved to the Parameter's constructor.
+    lowCutFilter.setType(juce::dsp::StateVariableTPTFilterType::highpass);
+    highCutFilter.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
 }
 
 Delay1_0AudioProcessor::~Delay1_0AudioProcessor()
@@ -110,6 +111,12 @@ void Delay1_0AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     feedbackL = 0.0f;
     feedbackR = 0.0f;
 
+    lowCutFilter.prepare(spec);
+    lowCutFilter.reset();
+
+    highCutFilter.prepare(spec);
+    highCutFilter.reset();
+
     //DBG(maxDelayInSamples);
 }
 
@@ -178,7 +185,10 @@ void Delay1_0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[m
             params.smoothen();
 
             float delayInSamples = params.delayTime / 1000.0f * sampleRate;
-            delayLine.setDelay(delayInSamples); 
+            delayLine.setDelay(delayInSamples);
+
+            lowCutFilter.setCutoffFrequency(params.lowCut);
+            highCutFilter.setCutoffFrequency(params.highCut);
 
             float dryL = inputDataL[sample];
             float dryR = inputDataR[sample];
@@ -192,7 +202,12 @@ void Delay1_0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[m
             float wetR = delayLine.popSample(1);
 
             feedbackL = wetL * params.feedback;
+            feedbackL = lowCutFilter.processSample(0, feedbackL);
+            feedbackL = highCutFilter.processSample(0, feedbackL);
+
             feedbackR = wetR * params.feedback;
+            feedbackR = lowCutFilter.processSample(1, feedbackR);
+            feedbackR = highCutFilter.processSample(1, feedbackR);
 
             float mixL = dryL + wetL * params.mix; // a * (1-c) + b * c where c is some value between 0 and 1 is linear interpolation
             float mixR = dryR + wetR * params.mix;
