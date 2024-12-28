@@ -121,6 +121,7 @@ void Delay1_0AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     lastHighCut = -1.0f;
 
     //DBG(maxDelayInSamples);
+    tempo.reset();
 }
 
 void Delay1_0AudioProcessor::releaseResources()
@@ -167,6 +168,13 @@ void Delay1_0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[m
 
     params.update();
 
+    tempo.update(getPlayHead());
+
+    float syncedTime = float(tempo.getMilisecondsForNoteLength(params.delayNote));
+    if (syncedTime > Parameters::maxDelayTime) {
+        syncedTime = Parameters::maxDelayTime;
+    }
+
     float sampleRate = float(getSampleRate());
 
     auto mainInput = getBusBuffer(buffer, true, 0);
@@ -187,7 +195,18 @@ void Delay1_0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[m
         {
             params.smoothen();
 
-            float delayInSamples = params.delayTime / 1000.0f * sampleRate;
+            float delayTime = params.tempoSync ? syncedTime : params.delayTime;
+            /*
+            The elongated way of writing the previous line of code which uses the ? : syntax (mini if statement) is
+
+            float delayTime;
+            if (params.tempoSync) {
+                delayTime = syncedTime;
+            } else {
+                delayTime = params.delayTime;
+            }
+            */
+            float delayInSamples = delayTime / 1000.0f * sampleRate;
             delayLine.setDelay(delayInSamples);
 
             if (params.lowCut != lastLowCut) {
