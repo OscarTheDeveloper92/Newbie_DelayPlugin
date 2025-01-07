@@ -39,7 +39,7 @@ Delay1_0AudioProcessorEditor::Delay1_0AudioProcessorEditor (Delay1_0AudioProcess
     tempoSyncButton.setButtonText("Sync");
     tempoSyncButton.setClickingTogglesState(true);
     tempoSyncButton.setBounds(0, 0, 70, 27);
-    tempoSyncButton.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::red);
+    tempoSyncButton.setLookAndFeel(ButtonLookAndFeel::get());
     delayGroup.addAndMakeVisible(tempoSyncButton);
 
     //delayTimeKnob.slider.setColour(juce::Slider::rotarySliderFillColourId,
