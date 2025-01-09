@@ -19,7 +19,7 @@ Delay1_0AudioProcessorEditor::Delay1_0AudioProcessorEditor (Delay1_0AudioProcess
     delayGroup.setText("Delay");
     delayGroup.setTextLabelPosition(juce::Justification::horizontallyCentred);
     delayGroup.addAndMakeVisible(delayTimeKnob);
-    delayGroup.addAndMakeVisible(delayNoteKnob);
+    delayGroup.addChildComponent(delayNoteKnob);
     addAndMakeVisible(delayGroup);
 
     feedbackGroup.setText("Feedback");
@@ -48,10 +48,13 @@ Delay1_0AudioProcessorEditor::Delay1_0AudioProcessorEditor (Delay1_0AudioProcess
     setSize (500, 330); //Why does everything go before setSize?
     setResizable(true, true);
     setLookAndFeel(&mainLF);
+    updateDelayKnobs(audioProcessor.params.tempoSyncParam->get());
+    audioProcessor.params.tempoSyncParam->addListener(this);
 }
 
 Delay1_0AudioProcessorEditor::~Delay1_0AudioProcessorEditor()
 {
+    audioProcessor.params.tempoSyncParam->removeListener(this);
     setLookAndFeel(nullptr);
 }
 
@@ -97,11 +100,30 @@ void Delay1_0AudioProcessorEditor::resized()
     //Position the knobs inside the groups
     delayTimeKnob.setTopLeftPosition(20, 20);
     tempoSyncButton.setTopLeftPosition(20, delayTimeKnob.getBottom() + 10);
-    delayNoteKnob.setTopLeftPosition(20, tempoSyncButton.getBottom() - 5);
+    delayNoteKnob.setTopLeftPosition(delayTimeKnob.getX(), delayTimeKnob.getY());
     mixKnob.setTopLeftPosition(20, 20);
     gainKnob.setTopLeftPosition(mixKnob.getX(), mixKnob.getBottom() + 10);
     feedbackKnob.setTopLeftPosition(20, 20);
     stereoKnob.setTopLeftPosition(feedbackKnob.getRight() + 20, 20);
     lowCutKnob.setTopLeftPosition(feedbackKnob.getX(), feedbackKnob.getBottom() + 10);
     highCutKnob.setTopLeftPosition(lowCutKnob.getRight() + 20, lowCutKnob.getY());
+}
+
+void Delay1_0AudioProcessorEditor::parameterValueChanged(int, float value)
+{
+    if (juce::MessageManager::getInstance()->isThisTheMessageThread()) {
+        updateDelayKnobs(value != 0.0f);
+    }
+    else {
+        juce::MessageManager::callAsync([this, value]
+            {
+                updateDelayKnobs(value != 0.0f);
+            });
+    }
+}
+
+void Delay1_0AudioProcessorEditor::updateDelayKnobs(bool tempoSyncActive)
+{
+    delayTimeKnob.setVisible(!tempoSyncActive);
+    delayTimeKnob.setVisible(tempoSyncActive);
 }

@@ -17,7 +17,7 @@
 //==============================================================================
 /**
 */
-class Delay1_0AudioProcessorEditor  : public juce::AudioProcessorEditor
+class Delay1_0AudioProcessorEditor  : public juce::AudioProcessorEditor, private juce::AudioProcessorParameter::Listener
 {
 public:
     Delay1_0AudioProcessorEditor (Delay1_0AudioProcessor&);
@@ -30,6 +30,10 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
+
+    void parameterValueChanged(int, float) override;
+    void parameterGestureChanged(int, bool) override {}
+
     Delay1_0AudioProcessor& audioProcessor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Delay1_0AudioProcessorEditor)
@@ -52,4 +56,6 @@ private:
     juce::GroupComponent delayGroup, feedbackGroup, outputGroup;
 
     MainLookAndFeel mainLF;
+
+    void updateDelayKnobs(bool tempoSyncActive);
 };

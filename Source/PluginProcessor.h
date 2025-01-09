@@ -59,8 +59,9 @@ public:
         *this, nullptr, "Parameters", Parameters::createParameterLayout()
     };
 
-private:
     Parameters params;
+
+private:
 
     juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::Linear> delayLine;
 
